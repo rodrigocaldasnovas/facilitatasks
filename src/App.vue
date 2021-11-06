@@ -9,6 +9,7 @@
 </template>
 
 <style lang="stylus">
+@import "../node_modules/@fortawesome/fontawesome-free/css/all.css";
 @font-face
   font-family SVN-Gilroy
   font-weight 400
