@@ -9,8 +9,14 @@
 </template>
 
 <style lang="stylus">
+@font-face
+  font-family SVN-Gilroy
+  font-weight 400
+  font-style normal
+  font-display auto;
+  src url("/fonts/gilroy-font/SVN-Gilroy Regular.ttf")
 #app
-  font-family Gilroy, Helvetica, Arial, sans-serif
+  font-family SVN-Gilroy, Helvetica, Arial, sans-serif
   -webkit-font-smoothing antialiased
   -moz-osx-font-smoothing grayscale
   text-align center
