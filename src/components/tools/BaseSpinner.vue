@@ -22,7 +22,7 @@ export default {
 }
 </script>
 
-<style lang="stylus" >
+<style lang="stylus">
 .base-spinner
   top 0
   bottom 0

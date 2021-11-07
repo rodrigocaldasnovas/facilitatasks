@@ -1,10 +1,10 @@
 <template>
   <div id="app">
     <base-spinner/>
-    <div id="nav">
+    <!-- <div id="nav">
       <router-link to="/">Home</router-link> |
       <router-link to="/about">About</router-link>
-    </div>
+    </div> -->
     <router-view/>
   </div>
 </template>
@@ -16,7 +16,9 @@ export default {
   components: {
     BaseSpinner
   },
-  created () {
+  mounted () {
+    window.uid = null
+    this.$router.push({ name: window.uid ? 'Home' : 'Login' })
     setTimeout(() => {
       this.$root.$emit('Spinner::hide')
     }, 3000)
@@ -33,12 +35,14 @@ export default {
   font-style normal
   font-display auto;
   src url("/fonts/gilroy-font/SVN-Gilroy Regular.ttf")
+*
+  box-sizing: border-box
 body
   margin 0
   padding: 0
   height 100vh
   width: 100vw
-  background-color var(--light-low)
+  background-color var(--light)
 #app
   font-family SVN-Gilroy, Helvetica, Arial, sans-serif
   -webkit-font-smoothing antialiased
