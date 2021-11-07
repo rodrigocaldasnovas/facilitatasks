@@ -1,7 +1,7 @@
 <template>
   <div class="login">
     <div class="area-brand">
-      <img alt="FacilitaTasks" src="../assets/logo.png">
+      <img alt="FacilitaTasks" src="../../assets/logo.png">
     </div>
     <div class="area-form">
       <div class="card-form">
