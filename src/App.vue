@@ -35,6 +35,12 @@ export default {
   font-style normal
   font-display auto;
   src url("/fonts/gilroy-font/SVN-Gilroy Regular.ttf")
+@font-face
+  font-family SVN-Gilroy-Bold
+  font-weight 800
+  font-style normal
+  font-display auto;
+  src url("/fonts/gilroy-font/SVN-Gilroy Bold.ttf")
 *
   box-sizing: border-box
 body

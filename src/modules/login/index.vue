@@ -5,14 +5,16 @@
     </div>
     <div class="area-form">
       <div class="card-form">
-        <a3>Entre com seus dados de acesso.</a3>
+        <my-label styleFont="bold" size="medium">Entre com seus dados de acesso.</my-label>
       </div>
     </div>
   </div>
 </template>
 
 <script>
+import MyLabel from '../../components/MyLabel.vue'
 export default {
+  components: { MyLabel },
   name: 'Login'
 }
 </script>
