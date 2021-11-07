@@ -1,5 +1,6 @@
 <template>
   <div id="app">
+    <base-spinner/>
     <div id="nav">
       <router-link to="/">Home</router-link> |
       <router-link to="/about">About</router-link>
@@ -8,7 +9,23 @@
   </div>
 </template>
 
+<script>
+import BaseSpinner from './components/tools/BaseSpinner.vue'
+
+export default {
+  components: {
+    BaseSpinner
+  },
+  created () {
+    setTimeout(() => {
+      this.$root.$emit('Spinner::hide')
+    }, 3000)
+  }
+}
+</script>
+
 <style lang="stylus">
+@import "./assets/variables.styl"
 @import "../node_modules/@fortawesome/fontawesome-free/css/all.css";
 @font-face
   font-family SVN-Gilroy
@@ -16,11 +33,14 @@
   font-style normal
   font-display auto;
   src url("/fonts/gilroy-font/SVN-Gilroy Regular.ttf")
+body
+  margin 0
+  padding: 0
+  height 100vh
+  width: 100vw
+  background-color var(--light-low)
 #app
   font-family SVN-Gilroy, Helvetica, Arial, sans-serif
   -webkit-font-smoothing antialiased
   -moz-osx-font-smoothing grayscale
-  text-align center
-  color #2c3e50
-  margin-top 60px
 </style>
