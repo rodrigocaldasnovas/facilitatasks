@@ -1,16 +1,16 @@
 <template>
-  <div class="home">
+  <layout-basico>
 
-  </div>
+  </layout-basico>
 </template>
 
 <script>
-// @ is an alias to /src
-// import HelloWorld from '@/components/HelloWorld.vue'
+import LayoutBasico from '@/components/layouts/LayoutBasico'
 
 export default {
-  name: 'Home'
-  // components: {
-  // }
+  name: 'Home',
+  components: {
+    LayoutBasico
+  }
 }
 </script>

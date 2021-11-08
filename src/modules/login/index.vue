@@ -5,7 +5,14 @@
     </div>
     <div class="area-form">
       <div class="card-form">
-        <my-label styleFont="bold" size="medium">Entre com seus dados de acesso.</my-label>
+        <form @submit.prevent="submit()">
+          <my-label class="colorDark bold medium mb-30">Entre com seus dados de acesso.</my-label>
+          <my-label class="semi-bold colorDarker small mb-5 mt-5">Nome de usuário ou e-mail:</my-label>
+          <input type="text" class="mb-15" v-model="username" required>
+          <my-label class="semi-bold colorDarker small mb-5 mt-5">Senha:</my-label>
+          <input type="password" class="mb-15" v-model="password" required>
+          <button class="responsive primary">Entrar</button>
+        </form>
       </div>
     </div>
   </div>
@@ -13,9 +20,41 @@
 
 <script>
 import MyLabel from '../../components/MyLabel.vue'
+import { mapState, mapActions } from 'vuex'
 export default {
+  data: function () {
+    return {
+      user: {
+        logged: false,
+        name: 'Eduardo Pereira da Costa',
+        username: 'eduardo',
+        role: 'Front-End Developer',
+        email: 'eduardo@appfacilita.com.br',
+        password: '123456'
+      },
+      username: '',
+      password: ''
+    }
+  },
   components: { MyLabel },
-  name: 'Login'
+  name: 'Login',
+  computed: {
+    ...mapState(['auth'])
+  },
+  methods: {
+    ...mapActions(['ActionSetToken', 'ActionSetUser']),
+    submit () {
+      if ((this.user.email === this.username) || (this.user.username === this.username)) {
+        if (this.user.password === this.password) {
+          this.ActionSetUser(this.user)
+          this.ActionSetToken('token-fake-jshdjshdjsdhsjdhsjdhsjdhsjdhsdsjdhsj')
+          this.$router.push({ name: 'Home' })
+          return true
+        }
+      }
+      alert('Error na autenticação!')
+    }
+  }
 }
 </script>
 

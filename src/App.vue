@@ -28,27 +28,7 @@ export default {
 
 <style lang="stylus">
 @import "./assets/variables.styl"
-@import "../node_modules/@fortawesome/fontawesome-free/css/all.css";
-@font-face
-  font-family SVN-Gilroy
-  font-weight 400
-  font-style normal
-  font-display auto;
-  src url("/fonts/gilroy-font/SVN-Gilroy Regular.ttf")
-@font-face
-  font-family SVN-Gilroy-Bold
-  font-weight 800
-  font-style normal
-  font-display auto;
-  src url("/fonts/gilroy-font/SVN-Gilroy Bold.ttf")
-*
-  box-sizing: border-box
-body
-  margin 0
-  padding: 0
-  height 100vh
-  width: 100vw
-  background-color var(--light)
+@import "./assets/global.styl"
 #app
   font-family SVN-Gilroy, Helvetica, Arial, sans-serif
   -webkit-font-smoothing antialiased
