@@ -4,18 +4,10 @@
       <img alt="FacilitaTasks" src="../../../assets/logo-solo.png">
     </div>
     <div class="sidebar-area-body">
-      <sidebar-button>
-        <img class="mb-5" src="../../../assets/vector.png">
-        <my-label class="bold colorLight verySmall">Dashboard</my-label>
-      </sidebar-button>
-      <sidebar-button>
-        <img class="mb-5" src="../../../assets/check-circle.png">
-        <my-label class="bold colorLight verySmall">Tarefas</my-label>
-      </sidebar-button>
-      <sidebar-button>
-        <img class="mb-5" src="../../../assets/gears.png">
-        <my-label class="bold colorLight verySmall">Configurações</my-label>
-      </sidebar-button>
+      <sidebar-button name="Dashboard" icon="fas fa-chart-bar" route="Dashboard"/>
+      <sidebar-button name="Tarefas" icon="far fa-check-circle" route="Tarefas"/>
+      <!-- Este terceiro icone era pro, entao improvisei com imagem dele -->
+      <sidebar-button name="Configurações" image="gears" route="Configuracoes"/>
     </div>
   </div>
 </template>

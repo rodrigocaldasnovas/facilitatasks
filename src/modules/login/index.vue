@@ -48,7 +48,7 @@ export default {
         if (this.user.password === this.password) {
           this.ActionSetUser(this.user)
           this.ActionSetToken('token-fake-jshdjshdjsdhsjdhsjdhsjdhsjdhsdsjdhsj')
-          this.$router.push({ name: 'Home' })
+          this.$router.push({ name: 'Dashboard' })
           return true
         }
       }

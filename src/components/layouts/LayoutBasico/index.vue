@@ -5,6 +5,7 @@
       <header-bar>
 
       </header-bar>
+      <slot></slot>
     </div>
   </div>
 </template>

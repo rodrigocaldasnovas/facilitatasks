@@ -23,23 +23,28 @@ export default new Vuex.Store({
   },
   mutations: {
     setToken (state, payload) {
-      state.token = payload
+      state.auth.token = payload
     },
     setUser (state, payload) {
-      state.user = payload
+      state.auth.user = payload
+    }
+  },
+  getter: {
+    hasToken ({ token }) {
+      return !!token
     }
   },
   actions: {
     ActionCheckToken ({ dispatch, state }) {
       if (state.token) {
-        return Promise.resolve(state.token)
+        return state.token
       }
       const token = storage.getLocalToken()
       if (!token) {
-        return Promise.reject(new Error('Token Invalid'))
+        return false
       }
       dispatch('ActionSetToken', token)
-      return dispatch('ActionLoadSession')
+      dispatch('ActionLoadSession')
     },
     ActionSetToken (context, payload) {
       storage.setLocalToken(payload)
@@ -49,16 +54,15 @@ export default new Vuex.Store({
       context.commit('setUser', payload)
     },
     ActionLoadSession ({ dispatch }) {
-      return new Promise((resolve, reject) => {
-        const token = storage.getLocalToken()
-        if (token) {
-          dispatch('ActionSetUser', user)
-          resolve()
-        } else {
-          dispatch('ActionLogout')
-          reject(Error)
-        }
-      })
+      const token = storage.getLocalToken()
+      if (token) {
+        dispatch('ActionSetUser', user)
+        // return token
+      } else {
+        dispatch('ActionLogout')
+        // return false
+      }
+      // })
     },
     ActionLogout ({ dispatch }) {
       dispatch('ActionSetUser', {})
