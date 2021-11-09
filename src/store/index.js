@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import * as storage from '../modules/login/storage'
 import _ from 'lodash'
+import shortid from 'shortid'
 
 Vue.use(Vuex)
 
@@ -24,25 +25,55 @@ export default new Vuex.Store({
     todos: []
   },
   mutations: {
-    addTodo (state, payload) {
-      const todos = [...state.todos, payload]
-      let urgents = todos.filter(item => {
+    check (state, payload) {
+      debugger
+      state.todos = state.todos.map(item => {
+        if (item.id === payload.id) {
+          return { ...item, completed: true }
+        } else {
+          return item
+        }
+      })
+    },
+    uncheck (state, payload) {
+      state.todos = state.todos.map(item => {
+        if (item.id === payload.id) {
+          return { ...item, completed: false }
+        } else {
+          return item
+        }
+      })
+    },
+    orderTodos (state) {
+      let completeds = state.todos.filter(item => {
+        return item.completed
+      })
+      const uncompleteds = state.todos.filter(item => {
+        return !item.completed
+      })
+      let urgents = uncompleteds.filter(item => {
         return item.urgent
       })
-      let importants = todos.filter(item => {
+      let importants = uncompleteds.filter(item => {
         return item.important
       })
-      let anothers = todos.filter(item => {
+      let anothers = uncompleteds.filter(item => {
         return item.another
       })
+      completeds = _.orderBy(completeds, ['title', 'description'], ['asc', 'asc'])
       urgents = _.orderBy(urgents, ['title', 'description'], ['asc', 'asc'])
       importants = _.orderBy(importants, ['title', 'description'], ['asc', 'asc'])
       anothers = _.orderBy(anothers, ['title', 'description'], ['asc', 'asc'])
       this.state.todos = [
+        ...completeds,
         ...urgents,
         ...importants,
         ...anothers
       ]
+    },
+    addTodo (state, payload) {
+      const id = shortid.generate()
+      state.todos = [...state.todos, { id, ...payload }]
     },
     setToken (state, payload) {
       state.auth.token = payload
@@ -57,8 +88,17 @@ export default new Vuex.Store({
     }
   },
   actions: {
+    ActionCheck (context, payload) {
+      context.commit('check', payload)
+      context.commit('orderTodos')
+    },
+    ActionUncheck (context, payload) {
+      context.commit('uncheck', payload)
+      context.commit('orderTodos')
+    },
     ActionAddTodo (context, payload) {
       context.commit('addTodo', payload)
+      context.commit('orderTodos')
     },
     ActionCheckToken ({ dispatch, state }) {
       if (state.token) {
