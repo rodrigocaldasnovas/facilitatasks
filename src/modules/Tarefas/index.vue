@@ -9,9 +9,9 @@
         </my-card>
       </div>
       <action-button @click.native="addTodo()"><i class="colorLight fas fa-plus"></i></action-button>
-      <my-modal :show="showEditTodo">
-        sjdhsjdhsjds
-      </my-modal>
+      <modal name="addTodoForm" width="660px" height="488px" :adaptive="true">
+        <add-item></add-item>
+      </modal>
     </div>
   </layout-basico>
 </template>
@@ -21,7 +21,7 @@ import LayoutBasico from '@/components/layouts/LayoutBasico'
 import MyLabel from '@/components/MyLabel.vue'
 import MyCard from '@/components/MyCard'
 import ActionButton from '@/components/ActionButton'
-import MyModal from '@/components/MyModal'
+import AddItem from './AddItem'
 import TarefasSidebar from './TarefasSidebar'
 export default {
   name: 'Tarefas',
@@ -36,11 +36,11 @@ export default {
     TarefasSidebar,
     MyCard,
     ActionButton,
-    MyModal
+    AddItem
   },
   methods: {
     addTodo () {
-      this.showEditTodo = true
+      this.$modal.show('addTodoForm')
     }
   }
 }
