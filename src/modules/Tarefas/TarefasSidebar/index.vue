@@ -1,15 +1,27 @@
 <template>
   <div class="tarefas-sidebar">
     <my-label class="bold medium colorDarkMedium mb-50">Categorias</my-label>
+    <sidebar-menuitem caption="Todas" @click.native="teste"/>
+    <sidebar-menuitem caption="Urgentes"/>
+    <sidebar-menuitem caption="Importantes"/>
+    <sidebar-menuitem caption="Outras"/>
+    <sidebar-menuitem caption="Finalizadas"/>
   </div>
 </template>
 
 <script>
+import SidebarMenuitem from './SidebarMenuitem'
 import MyLabel from '../../../components/MyLabel.vue'
 export default {
   name: 'TarefasSidebar',
   components: {
-    MyLabel
+    MyLabel,
+    SidebarMenuitem
+  },
+  methods: {
+    teste () {
+      console.log('teste')
+    }
   }
 }
 </script>
@@ -17,8 +29,8 @@ export default {
 <style lang="stylus">
 .tarefas-sidebar
   display: flex
-  align-items: center
-  // justify-content: center
+  flex-direction: column
+  justify-content: center
   padding-left: 40px
   width: 227px
   height: calc(100vh - 83px)
