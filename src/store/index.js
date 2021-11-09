@@ -1,12 +1,14 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import * as storage from '../modules/login/storage'
+import _ from 'lodash'
 
 Vue.use(Vuex)
 
 const user = {
   logged: false,
-  name: 'Eduardo Pereira da Costa',
+  firstname: 'Eduardo Pereira',
+  lastname: 'da Costa',
   username: 'eduardo',
   role: 'Front-End Developer',
   email: 'eduardo@appfacilita.com.br',
@@ -22,6 +24,26 @@ export default new Vuex.Store({
     todos: []
   },
   mutations: {
+    addTodo (state, payload) {
+      const todos = [...state.todos, payload]
+      let urgents = todos.filter(item => {
+        return item.urgent
+      })
+      let importants = todos.filter(item => {
+        return item.important
+      })
+      let anothers = todos.filter(item => {
+        return item.another
+      })
+      urgents = _.orderBy(urgents, ['title', 'description'], ['asc', 'asc'])
+      importants = _.orderBy(importants, ['title', 'description'], ['asc', 'asc'])
+      anothers = _.orderBy(anothers, ['title', 'description'], ['asc', 'asc'])
+      this.state.todos = [
+        ...urgents,
+        ...importants,
+        ...anothers
+      ]
+    },
     setToken (state, payload) {
       state.auth.token = payload
     },
@@ -35,6 +57,9 @@ export default new Vuex.Store({
     }
   },
   actions: {
+    ActionAddTodo (context, payload) {
+      context.commit('addTodo', payload)
+    },
     ActionCheckToken ({ dispatch, state }) {
       if (state.token) {
         return state.token

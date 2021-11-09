@@ -12,6 +12,17 @@
   font-style normal
   font-display auto;
   src url("/fonts/gilroy-font/SVN-Gilroy Bold.ttf")
+
+placeholder()
+	&::-webkit-input-placeholder
+		{block}
+	&:-moz-placeholder
+		{block}
+	&::-moz-placeholder
+		{block}
+	&:-ms-input-placeholder
+		{block}
+
 *
   box-sizing: border-box
 body
@@ -32,6 +43,8 @@ input, textarea
   -webkit-transition: 0.5s
   transition: 0.5s
   outline: none;
+  +placeholder()
+    color: #A6C1D2
 input:focus, textarea:focus  
   border: 2px solid #2693FF
 textarea  
@@ -70,6 +83,8 @@ textarea
   margin-right: 5px
 .mr-10
   margin-right: 10px
+.mr-15  
+  margin-right: 15px
 .colorDark
   color var(--dark)
 .colorDarker  
@@ -80,6 +95,8 @@ textarea
   color var(--light)  
 .colorDanger
   color var(--danger)    
+.colorDarkLow
+  color var(--dark-low)
 .backColorDanger
   background-color var(--danger)    
 .colorAlert
@@ -88,6 +105,10 @@ textarea
   background-color var(--alert)   
 .backGreenSpecial  
   background-color var(--green-special) 
+.backGreySpecial
+  background-color: var(--grey-special)  
+.background
+  background-color: var(--background)  
 .responsive
   width: 100%  
 button
@@ -101,4 +122,5 @@ button
   font-family SVN-Gilroy-Bold
   &:hover 
     background-color: #06744c;  
-
+.destaqueBlue
+  color: var(--featured)

@@ -27,7 +27,7 @@ export default {
   height: 100vh
   display: flex
 .content
-  background-color: #E9F4FB
+  background-color: var(--background)
   height: 100vh
   width: 100%
   display: flex

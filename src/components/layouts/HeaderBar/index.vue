@@ -14,5 +14,5 @@ export default {
 .header-bar
   background: #FFFFFF
   box-shadow: 0px 1px 6px rgba(40, 56, 72, 0.07)
-  height: 83px
+  min-height: 83px
 </style>

@@ -12,5 +12,5 @@ export default {
 
 <style lang="stylus">
 .my-card
-  background-color: white
+  width: 645px
 </style>
