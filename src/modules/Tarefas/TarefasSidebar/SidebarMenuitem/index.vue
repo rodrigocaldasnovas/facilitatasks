@@ -1,10 +1,11 @@
 <template>
   <div class="sidebar-menuitem mb-15">
-    <botao-arrow></botao-arrow>
-    <my-label class="semi-bold colorDark small mr-5">
+    <botao-arrow :active="active"></botao-arrow>
+    <my-label class="semi-bold small mr-5" :class="{colorDark:!active,colorFeatured:active}">
       {{caption}}
     </my-label>
-    <spam-status type="alert"></spam-status>
+    <spam-status type="alert" v-if="importants">{{ importants }}</spam-status>
+    <spam-status type="danger" v-if="urgents">{{ urgents }}</spam-status>
   </div>
 </template>
 
@@ -17,7 +18,8 @@ export default {
   props: [
     'caption',
     'importants',
-    'urgents'
+    'urgents',
+    'active'
   ],
   components: {
     MyLabel,

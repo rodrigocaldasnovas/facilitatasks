@@ -1,12 +1,14 @@
 <template>
   <div class="botao-arrow">
-    <img src="../../../../assets/arrow.png"/>
+    <img src="../../../../assets/arrowon.png" v-if="active"/>
+    <img src="../../../../assets/arrow.png" v-else/>
   </div>
 </template>
 
 <script>
 export default {
-  name: 'BotaoArrow'
+  name: 'BotaoArrow',
+  props: ['active']
 }
 </script>
 

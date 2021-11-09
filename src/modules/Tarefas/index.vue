@@ -9,19 +9,20 @@
           >Olá <span class="destaqueBlue">{{ auth.user.firstname }}</span>, você tem
           <span class="destaqueBlue">4 tarefas</span> pendentes.</my-label>
           <div class="submit-line mb-30">
-            <input type="text" class="medium mb-15 background"
+            <input type="text" class="medium mb-15 background" v-model="searchBy"
             required placeholder="Buscar Tarefas">
-            <button id="buttonSearch" class="submit-lente" type="submit">
+            <button id="buttonSearch" class="submit-lente" @click="pesquise" type="button">
               <i class="fa fa-search"></i>
             </button>
           </div>
-          <div class="grid-todos">
-            <div class="grid-todos-item mb-5" v-for="(item, index) in todos" :key="index">
-              <div class="item-chk grid-todos-item-completed mr-15">
+          <div class="grid-todos ">
+            <div class="grid-todos-item mb-5" :class="{completed:item.completed}" v-for="(item, index) in todos" :key="index">
+              <div class="item-chk grid-todos-item-completed mr-15 ">
                 <img src="@/assets/itemcheck.png" v-if="!item.completed" @click="check(item)"/>
                 <img src="@/assets/itemchecked.png" v-else @click="uncheck(item)"/>
               </div>
-              <my-label class="item-tit bold colorDarkLow small">{{item.title}}</my-label>
+              <my-label class="item-tit bold colorDarkLow small"
+              :class="{riscado:item.completed}">{{item.title}}</my-label>
               <div class="item-label">
                 <my-spam class="backColorDanger" v-if="item.urgent">Urgente</my-spam>
                 <my-spam class="backColorAlert" v-if="item.important">Importante</my-spam>
@@ -50,6 +51,7 @@ import AddItem from './AddItem'
 import TarefasSidebar from './TarefasSidebar'
 import { mapState, mapActions } from 'vuex'
 import MySpam from '../../components/My-Spam.vue'
+import { mapFields } from 'vuex-map-fields'
 export default {
   name: 'Tarefas',
   data: function () {
@@ -58,7 +60,8 @@ export default {
     }
   },
   computed: {
-    ...mapState(['todos', 'auth'])
+    ...mapState(['todos', 'auth']),
+    ...mapFields(['searchBy'])
   },
   components: {
     LayoutBasico,
@@ -70,7 +73,7 @@ export default {
     MySpam
   },
   methods: {
-    ...mapActions(['ActionCheck', 'ActionUncheck']),
+    ...mapActions(['ActionCheck', 'ActionUncheck', 'ActionFiltre']),
     addTodo () {
       this.$modal.show('addTodoForm')
     },
@@ -79,6 +82,9 @@ export default {
     },
     uncheck (item) {
       this.ActionUncheck(item)
+    },
+    pesquise () {
+      this.ActionFiltre()
     }
   }
 }
@@ -113,7 +119,7 @@ export default {
 .grid-todos
   width: 100%
   height: calc(100vh - 300px)
-  overflow: scroll
+  overflow-y: auto
 .grid-todos-item
   height: 64px
   width: 100%
@@ -124,7 +130,7 @@ export default {
   display: grid
   align-items: center
   grid-template-columns: 45px auto 117px 10px
-  grid-grid-template-areas: "CK TT ST OP"
+  grid-template-areas: "CK TT ST OP"
 .item-chk
   grid-grid-area: CK
   cursor pointer
@@ -142,4 +148,8 @@ export default {
   align-items: center
   justify-content: center
   width: 100%
+.completed
+  opacity : 0.5
+.riscado
+  text-decoration: line-through
 </style>

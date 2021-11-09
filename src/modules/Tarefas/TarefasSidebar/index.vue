@@ -1,9 +1,9 @@
 <template>
   <div class="tarefas-sidebar">
     <my-label class="bold medium colorDarkMedium mb-50">Categorias</my-label>
-    <sidebar-menuitem caption="Todas" @click.native="teste"/>
-    <sidebar-menuitem caption="Urgentes"/>
-    <sidebar-menuitem caption="Importantes"/>
+    <sidebar-menuitem caption="Todas" :active="true" @click.native="teste"/>
+    <sidebar-menuitem caption="Urgentes" :urgents="urgents"/>
+    <sidebar-menuitem caption="Importantes" :importants="importants"/>
     <sidebar-menuitem caption="Outras"/>
     <sidebar-menuitem caption="Finalizadas"/>
   </div>
@@ -12,11 +12,15 @@
 <script>
 import SidebarMenuitem from './SidebarMenuitem'
 import MyLabel from '../../../components/MyLabel.vue'
+import { mapState } from 'vuex'
 export default {
   name: 'TarefasSidebar',
   components: {
     MyLabel,
     SidebarMenuitem
+  },
+  computed: {
+    ...mapState(['importants', 'urgents'])
   },
   methods: {
     teste () {

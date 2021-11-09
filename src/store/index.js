@@ -3,6 +3,10 @@ import Vuex from 'vuex'
 import * as storage from '../modules/login/storage'
 import _ from 'lodash'
 import shortid from 'shortid'
+import { getField, updateField } from 'vuex-map-fields'
+import createPersistedState from 'vuex-persistedstate'
+import SecureLS from 'secure-ls'
+var ls = new SecureLS({ isCompression: false })
 
 Vue.use(Vuex)
 
@@ -22,12 +26,17 @@ export default new Vuex.Store({
       user: {},
       token: ''
     },
-    todos: []
+    todos: [],
+    todos_full: [],
+    searchBy: '',
+    filterBy: 'all',
+    importants: 0,
+    urgents: 0
   },
   mutations: {
+    updateField,
     check (state, payload) {
-      debugger
-      state.todos = state.todos.map(item => {
+      state.todos_full = state.todos_full.map(item => {
         if (item.id === payload.id) {
           return { ...item, completed: true }
         } else {
@@ -36,7 +45,7 @@ export default new Vuex.Store({
       })
     },
     uncheck (state, payload) {
-      state.todos = state.todos.map(item => {
+      state.todos_full = state.todos.map(item => {
         if (item.id === payload.id) {
           return { ...item, completed: false }
         } else {
@@ -44,11 +53,19 @@ export default new Vuex.Store({
         }
       })
     },
-    orderTodos (state) {
-      let completeds = state.todos.filter(item => {
+    processTodos (state) {
+      let data = ''
+      if (state.searchBy !== '') {
+        data = state.todos_full.filter(item => {
+          return ((item.title.indexOf(state.searchBy) !== -1) || (item.description.indexOf(state.searchBy) !== -1))
+        })
+      } else {
+        data = state.todos_full
+      }
+      let completeds = data.filter(item => {
         return item.completed
       })
-      const uncompleteds = state.todos.filter(item => {
+      const uncompleteds = data.filter(item => {
         return !item.completed
       })
       let urgents = uncompleteds.filter(item => {
@@ -57,6 +74,8 @@ export default new Vuex.Store({
       let importants = uncompleteds.filter(item => {
         return item.important
       })
+      state.importants = importants.length
+      state.urgents = urgents.length
       let anothers = uncompleteds.filter(item => {
         return item.another
       })
@@ -64,7 +83,9 @@ export default new Vuex.Store({
       urgents = _.orderBy(urgents, ['title', 'description'], ['asc', 'asc'])
       importants = _.orderBy(importants, ['title', 'description'], ['asc', 'asc'])
       anothers = _.orderBy(anothers, ['title', 'description'], ['asc', 'asc'])
-      this.state.todos = [
+      // completeds = ((state.filterBy === 'all') || ()) ? completeds : {}
+      // completeds = state.filterBy ? completeds : {}
+      state.todos = [
         ...completeds,
         ...urgents,
         ...importants,
@@ -73,7 +94,8 @@ export default new Vuex.Store({
     },
     addTodo (state, payload) {
       const id = shortid.generate()
-      state.todos = [...state.todos, { id, ...payload }]
+      state.todos_full = [...state.todos_full, { id, ...payload }]
+      state.todos = state.todos_full
     },
     setToken (state, payload) {
       state.auth.token = payload
@@ -82,23 +104,27 @@ export default new Vuex.Store({
       state.auth.user = payload
     }
   },
-  getter: {
+  getters: {
+    getField,
     hasToken ({ token }) {
       return !!token
     }
   },
   actions: {
+    ActionFiltre (context) {
+      context.commit('processTodos')
+    },
     ActionCheck (context, payload) {
       context.commit('check', payload)
-      context.commit('orderTodos')
+      context.commit('processTodos')
     },
     ActionUncheck (context, payload) {
       context.commit('uncheck', payload)
-      context.commit('orderTodos')
+      context.commit('processTodos')
     },
     ActionAddTodo (context, payload) {
       context.commit('addTodo', payload)
-      context.commit('orderTodos')
+      context.commit('processTodos')
     },
     ActionCheckToken ({ dispatch, state }) {
       if (state.token) {
@@ -134,6 +160,14 @@ export default new Vuex.Store({
       dispatch('ActionSetToken', '')
     }
   },
-  modules: {
-  }
+  plugins: [
+    createPersistedState({
+      key: 'facilitaTasks',
+      storage: {
+        getItem: (key) => ls.get(key),
+        setItem: (key, value) => ls.set(key, value),
+        removeItem: (key) => ls.remove(key)
+      }
+    })
+  ]
 })
