@@ -17,7 +17,8 @@ const user = {
   username: 'eduardo',
   role: 'Front-End Developer',
   email: 'eduardo@appfacilita.com.br',
-  password: '123456'
+  password: '123456',
+  office: 'Front-end Developer'
 }
 
 export default new Vuex.Store({
@@ -54,6 +55,7 @@ export default new Vuex.Store({
       })
     },
     processTodos (state) {
+      // debugger
       let data = ''
       if (state.searchBy !== '') {
         data = state.todos_full.filter(item => {
@@ -83,14 +85,27 @@ export default new Vuex.Store({
       urgents = _.orderBy(urgents, ['title', 'description'], ['asc', 'asc'])
       importants = _.orderBy(importants, ['title', 'description'], ['asc', 'asc'])
       anothers = _.orderBy(anothers, ['title', 'description'], ['asc', 'asc'])
-      // completeds = ((state.filterBy === 'all') || ()) ? completeds : {}
-      // completeds = state.filterBy ? completeds : {}
-      state.todos = [
-        ...completeds,
-        ...urgents,
-        ...importants,
-        ...anothers
-      ]
+      state.todos = []
+      if ((state.filterBy === 'all') || (state.filterBy === 'completeds')) {
+        state.todos = [...completeds]
+      }
+      if ((state.filterBy === 'all') || (state.filterBy === 'urgents')) {
+        state.todos = [...state.todos, ...urgents]
+      }
+      if ((state.filterBy === 'all') || (state.filterBy === 'importants')) {
+        state.todos = [...state.todos, ...importants]
+      }
+      if ((state.filterBy === 'all') || (state.filterBy === 'anothers')) {
+        state.todos = [...state.todos, ...anothers]
+      }
+      // importants = ((state.filterBy === 'all') || (state.filterBy === 'importants')) ? importants : {}
+      // anothers = ((state.filterBy === 'all') || (state.filterBy === 'anothers')) ? anothers : {}
+      // state.todos = [
+      //   ...completeds,
+      //   ...urgents,
+      //   ...importants,
+      //   ...anothers
+      // ]
     },
     addTodo (state, payload) {
       const id = shortid.generate()
@@ -102,6 +117,9 @@ export default new Vuex.Store({
     },
     setUser (state, payload) {
       state.auth.user = payload
+    },
+    setFilter (state, payload) {
+      state.filterBy = payload
     }
   },
   getters: {
@@ -111,6 +129,10 @@ export default new Vuex.Store({
     }
   },
   actions: {
+    ActionSetFiltre (context, payload) {
+      context.commit('setFilter', payload)
+      context.commit('processTodos')
+    },
     ActionFiltre (context) {
       context.commit('processTodos')
     },

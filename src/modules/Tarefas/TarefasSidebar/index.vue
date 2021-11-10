@@ -1,18 +1,22 @@
 <template>
   <div class="tarefas-sidebar">
     <my-label class="bold medium colorDarkMedium mb-50">Categorias</my-label>
-    <sidebar-menuitem caption="Todas" :active="true" @click.native="teste"/>
-    <sidebar-menuitem caption="Urgentes" :urgents="urgents"/>
-    <sidebar-menuitem caption="Importantes" :importants="importants"/>
-    <sidebar-menuitem caption="Outras"/>
-    <sidebar-menuitem caption="Finalizadas"/>
+    <sidebar-menuitem caption="Todas" :active="filterBy === 'all'" @click.native="setFilter('all')"/>
+    <sidebar-menuitem caption="Urgentes" :urgents="urgents"
+    @click.native="setFilter('urgents')" :active="filterBy === 'urgents'"/>
+    <sidebar-menuitem caption="Importantes" :importants="importants"
+    @click.native="setFilter('importants')" :active="filterBy === 'importants'"/>
+    <sidebar-menuitem caption="Outras" @click.native="setFilter('anothers')"
+    :active="filterBy === 'anothers'"/>
+    <sidebar-menuitem caption="Finalizadas" @click.native="setFilter('completeds')"
+    :active="filterBy === 'completeds'"/>
   </div>
 </template>
 
 <script>
 import SidebarMenuitem from './SidebarMenuitem'
 import MyLabel from '../../../components/MyLabel.vue'
-import { mapState } from 'vuex'
+import { mapState, mapActions } from 'vuex'
 export default {
   name: 'TarefasSidebar',
   components: {
@@ -20,11 +24,12 @@ export default {
     SidebarMenuitem
   },
   computed: {
-    ...mapState(['importants', 'urgents'])
+    ...mapState(['importants', 'urgents', 'filterBy'])
   },
   methods: {
-    teste () {
-      console.log('teste')
+    ...mapActions(['ActionSetFiltre']),
+    setFilter (filtro) {
+      this.ActionSetFiltre(filtro)
     }
   }
 }
