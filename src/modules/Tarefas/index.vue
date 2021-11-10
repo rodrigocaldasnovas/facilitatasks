@@ -1,6 +1,6 @@
 <template>
   <layout-basico>
-    <div class="module-tarefas">
+    <div class="module-tarefas" @click="outside">
       <tarefas-sidebar></tarefas-sidebar>
       <div class="tarefas-body">
         <my-card>
@@ -27,9 +27,43 @@
                 <my-spam class="backColorDanger" v-if="item.urgent">Urgente</my-spam>
                 <my-spam class="backColorAlert" v-if="item.important">Importante</my-spam>
               </div>
-              <div class="item-options">
+              <div class="item-options" @click.stop="openThis(item.id)" >
                 <img src="@/assets/tree.png" />
+                <div class="box-menu" v-show="openId === item.id">
+                  <img class="dropdown-menu-img" src="@/assets/treeblue.png" />
+                  <div class="options-drop">
+                    <div class="dropdown-item" @click.stop="editar(item)">
+                      <img src="@/assets/greenbol.png"/>
+                      <my-label class="item-tit bold colorDarkLow small">Editar</my-label>
+                    </div>
+                    <div class="dropdown-item" @click.stop="excluir(item)">
+                      <img src="@/assets/bluebol.png"/>
+                      <my-label class="item-tit bold colorDarkLow small">Excluir</my-label>
+                    </div>
+                  </div>
+                </div>
               </div>
+              <!-- <ul class="icons-list item-options">
+                <li class="dropdown" :class="{open:item.id === openId}" @click="openThis(item.id)" >
+                  <a href="#" class="dropdown-toggle" data-toggle="dropdown"
+                  aria-expanded="true">
+                    <img src="@/assets/tree.png" />
+                  </a>
+                  <div class="dropdown-menu dropdown-menu-right" v-show="menuDropDown" v-click-outside="nameOfCustomEventToCall">
+                    <img class="dropdown-menu-img" src="@/assets/treeblue.png" />
+                    <div class="options-drop">
+                      <div class="dropdown-item" @click="editar(item)">
+                        <img src="@/assets/greenbol.png"/>
+                        <my-label class="item-tit bold colorDarkLow small">Editar</my-label>
+                      </div>
+                      <div class="dropdown-item" @click="excluir(item)">
+                        <img src="@/assets/bluebol.png"/>
+                        <my-label class="item-tit bold colorDarkLow small">Excluir</my-label>
+                      </div>
+                    </div>
+                  </div>
+                </li>
+              </ul> -->
             </div>
           </div>
         </my-card>
@@ -37,6 +71,12 @@
       <action-button @click.native="addTodo()"><i class="colorLight fas fa-plus"></i></action-button>
       <modal name="addTodoForm" width="660px" height="488px" :adaptive="true">
         <add-item></add-item>
+      </modal>
+      <modal name="updateTodoForm" width="660px" height="488px" :adaptive="true">
+        <edit-item :item="item"></edit-item>
+      </modal>
+      <modal name="deleteTodoForm" width="477px" height="345px" :adaptive="true">
+        <excluir-item :item="item"></excluir-item>
       </modal>
     </div>
   </layout-basico>
@@ -48,6 +88,8 @@ import MyLabel from '@/components/MyLabel.vue'
 import MyCard from '@/components/MyCard'
 import ActionButton from '@/components/ActionButton'
 import AddItem from './AddItem'
+import EditItem from './EditItem'
+import ExcluirItem from './ExcluirItem'
 import TarefasSidebar from './TarefasSidebar'
 import { mapState, mapActions } from 'vuex'
 import MySpam from '../../components/My-Spam.vue'
@@ -56,7 +98,11 @@ export default {
   name: 'Tarefas',
   data: function () {
     return {
-      showEditTodo: false
+      showEditTodo: false,
+      openId: '',
+      item: {},
+      menuDropDown: false,
+      opening: false
     }
   },
   computed: {
@@ -70,10 +116,36 @@ export default {
     MyCard,
     ActionButton,
     AddItem,
-    MySpam
+    EditItem,
+    MySpam,
+    ExcluirItem
   },
   methods: {
-    ...mapActions(['ActionCheck', 'ActionUncheck', 'ActionFiltre']),
+    ...mapActions(['ActionCheck', 'ActionUncheck', 'ActionSearch']),
+    closeSearch () {
+      this.openId = ''
+      console.log('outside')
+    },
+    outside () {
+      if (this.opening) {
+        this.opening = false
+        this.openId = ''
+      }
+    },
+    editar (item) {
+      this.openId = ''
+      this.item = item
+      this.$modal.show('updateTodoForm')
+    },
+    excluir (item) {
+      this.openId = ''
+      this.item = item
+      this.$modal.show('deleteTodoForm')
+    },
+    openThis (id) {
+      this.opening = true
+      this.openId = id
+    },
     addTodo () {
       this.$modal.show('addTodoForm')
     },
@@ -84,7 +156,7 @@ export default {
       this.ActionUncheck(item)
     },
     pesquise () {
-      this.ActionFiltre()
+      this.ActionSearch()
     }
   }
 }
@@ -148,8 +220,88 @@ export default {
   align-items: center
   justify-content: center
   width: 100%
+  position: relative
 .completed
   opacity : 0.5
 .riscado
   text-decoration: line-through
+// .icons-list
+//   margin: 0
+//   padding: 0
+//   list-style: none
+//   line-height: 1
+//   font-size: 0
+// .icons-list>li:first-child
+//   margin-left: 0;
+// .icons-list>li
+//   position: relative
+//   display: inline-block
+//   margin-left: 5px
+//   font-size: 13px
+// .icons-list>li>a
+//   color: inherit
+//   display: block
+//   opacity: 1
+// .open>a
+//   outline: 0;
+// .open>.dropdown-menu
+//   display: block
+// .dropdown-menu
+//   min-width: 180px
+//   padding: 7px 0
+//   color: #333
+//   -webkit-box-shadow: 0 1px 3px rgb(0 0 0 / 10%)
+//   box-shadow: 0 1px 3px rgb(0 0 0 / 10%)
+// .dropdown-menu-right
+//   left: auto
+//   right: 0
+// .dropdown-menu
+//   position: absolute
+//   height: 74px
+//   top: -15px
+//   left: -95px
+//   z-index: 1000
+//   display: none
+//   float: left
+//   min-width: 109px
+//   padding: 15px 11px
+//   margin: 2px 0 0
+//   list-style: none
+//   font-size: 13px
+//   text-align: left
+//   background-color: #fff
+//   border: 1px solid #ddd
+//   border-radius: 3px
+//   // -webkit-box-shadow: 0 6px 12px rgb(0 0 0 / 18%)
+//   // box-shadow: 0 6px 12px rgb(0 0 0 / 18%)
+//   box-shadow: 0px 0px 8px 2px rgba(49, 81, 113, 0.1)
+//   border-radius: 5px
+//   background-clip: padding-box
+.options-drop
+  display: flex
+  flex-direction: column
+  height: 100%
+  justify-content: space-between
+.dropdown-item
+  display: flex
+  align-items: center
+.dropdown-item > img
+  margin-right: 10px
+.dropdown-menu-img
+  position: absolute
+  right: 10px
+  top: 15px
+// .item-tit
+//   cursor pointer
+.box-menu
+  background: #fff
+  width: 110px
+  position: absolute
+  top: -15px
+  left: -95px
+  height: 74px
+  box-shadow: 0px 0px 8px 2px rgba(49, 81, 113, 0.1)
+  border-radius: 5px
+  min-width: 109px
+  padding: 15px 11px
 </style>

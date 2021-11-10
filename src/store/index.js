@@ -24,7 +24,16 @@ const user = {
 export default new Vuex.Store({
   state: {
     auth: {
-      user: {},
+      user: {
+        logged: false,
+        firstname: 'Eduardo Pereira',
+        lastname: 'da Costa',
+        username: 'eduardo',
+        role: 'Front-End Developer',
+        email: 'eduardo@appfacilita.com.br',
+        password: '123456',
+        office: 'Front-end Developer'
+      },
       token: ''
     },
     todos: [],
@@ -36,6 +45,12 @@ export default new Vuex.Store({
   },
   mutations: {
     updateField,
+    excluir (state, payload) {
+      state.todos_full = state.todos_full.filter(item => {
+        return (payload.id !== item.id)
+      })
+      state.todos = state.todos_full
+    },
     check (state, payload) {
       state.todos_full = state.todos_full.map(item => {
         if (item.id === payload.id) {
@@ -55,11 +70,10 @@ export default new Vuex.Store({
       })
     },
     processTodos (state) {
-      // debugger
       let data = ''
       if (state.searchBy !== '') {
         data = state.todos_full.filter(item => {
-          return ((item.title.indexOf(state.searchBy) !== -1) || (item.description.indexOf(state.searchBy) !== -1))
+          return ((item.title.indexOf(state.searchBy) !== -1) || (item.descript.indexOf(state.searchBy) !== -1))
         })
       } else {
         data = state.todos_full
@@ -98,14 +112,12 @@ export default new Vuex.Store({
       if ((state.filterBy === 'all') || (state.filterBy === 'anothers')) {
         state.todos = [...state.todos, ...anothers]
       }
-      // importants = ((state.filterBy === 'all') || (state.filterBy === 'importants')) ? importants : {}
-      // anothers = ((state.filterBy === 'all') || (state.filterBy === 'anothers')) ? anothers : {}
-      // state.todos = [
-      //   ...completeds,
-      //   ...urgents,
-      //   ...importants,
-      //   ...anothers
-      // ]
+    },
+    updateTodo (state, payload) {
+      state.todos_full = state.todos_full.map(item => {
+        return (payload.id === item.id) ? payload : item
+      })
+      state.todos = state.todos_full
     },
     addTodo (state, payload) {
       const id = shortid.generate()
@@ -125,15 +137,20 @@ export default new Vuex.Store({
   getters: {
     getField,
     hasToken ({ token }) {
+      console.log(!!token)
       return !!token
     }
   },
   actions: {
+    ActionExcluir (context, payload) {
+      context.commit('excluir', payload)
+      context.commit('processTodos')
+    },
     ActionSetFiltre (context, payload) {
       context.commit('setFilter', payload)
       context.commit('processTodos')
     },
-    ActionFiltre (context) {
+    ActionSearch (context) {
       context.commit('processTodos')
     },
     ActionCheck (context, payload) {
@@ -146,6 +163,10 @@ export default new Vuex.Store({
     },
     ActionAddTodo (context, payload) {
       context.commit('addTodo', payload)
+      context.commit('processTodos')
+    },
+    ActionUpdateTodo (context, payload) {
+      context.commit('updateTodo', payload)
       context.commit('processTodos')
     },
     ActionCheckToken ({ dispatch, state }) {
