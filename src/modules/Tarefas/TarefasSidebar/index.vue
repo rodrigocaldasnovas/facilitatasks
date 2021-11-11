@@ -21,8 +21,16 @@ export default {
   name: 'TarefasSidebar',
   data: function () {
     return {
-      visible: true
+      visible: false
     }
+  },
+  created () {
+    this.$root.$on('TarefasSidebar::show', () => {
+      this.visible = true
+    })
+    this.$root.$on('TarefasSidebar::hide', () => {
+      this.visible = false
+    })
   },
   components: {
     MyLabel,

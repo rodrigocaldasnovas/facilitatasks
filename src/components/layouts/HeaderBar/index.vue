@@ -29,8 +29,8 @@ export default {
     padding: 14px 33px
     justify-content: flex-end
     z-index var(--top-3)
-  i
-    display: none
+    i
+      display: none
 @media screen and (max-width: 740px)
   .header-bar
     background: #FFFFFF

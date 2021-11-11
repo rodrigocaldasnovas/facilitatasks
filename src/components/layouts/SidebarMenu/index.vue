@@ -23,7 +23,7 @@ export default {
   name: 'SidebarMenu',
   data: function () {
     return {
-      visible: true
+      visible: false
     }
   },
   components: {

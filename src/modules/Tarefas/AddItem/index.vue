@@ -12,15 +12,21 @@
     </div>
     <div class="add-item-footer">
       <div class="add-item-footer-left">
-        <img class="mr-10" src="@/assets/checked.png" @click="checkUrgent(false)" v-if="urgent" />
-        <img class="mr-10" src="@/assets/unchecked.png" @click="checkUrgent(true)" v-if="!urgent"/>
-        <my-label class="semi-bold colorDarker small mb-5 mt-5 mr-10" @click.native="checkUrgent(true)">Urgente</my-label>
-        <img class="mr-10" src="@/assets/checked.png" @click="checkImport(false)" v-if="important"/>
-        <img class="mr-10" src="@/assets/unchecked.png" @click="checkImport(true)" v-if="!important"/>
-        <my-label class="semi-bold colorDarker small mb-5 mt-5 mr-10" @click.native="checkImport(true)">Importante</my-label>
-        <img class="mr-10" src="@/assets/checked.png" @click="checkAnother(false)" v-if="another"/>
-        <img class="mr-10" src="@/assets/unchecked.png" @click="checkAnother(true)" v-if="!another"/>
-        <my-label class="semi-bold colorDarker small mb-5 mt-5" @click.native="checkAnother(true)">Outro</my-label>
+        <div class="add-item-footer-left-item">
+          <img class="mr-10" src="@/assets/checked.png" @click="checkUrgent(false)" v-if="urgent" />
+          <img class="mr-10" src="@/assets/unchecked.png" @click="checkUrgent(true)" v-if="!urgent"/>
+          <my-label class="semi-bold colorDarker small mb-5 mt-5 mr-10" @click.native="checkUrgent(true)">Urgente</my-label>
+        </div>
+        <div class="add-item-footer-left-item">
+          <img class="mr-10" src="@/assets/checked.png" @click="checkImport(false)" v-if="important"/>
+          <img class="mr-10" src="@/assets/unchecked.png" @click="checkImport(true)" v-if="!important"/>
+          <my-label class="semi-bold colorDarker small mb-5 mt-5 mr-10" @click.native="checkImport(true)">Importante</my-label>
+        </div>
+        <div class="add-item-footer-left-item">
+          <img class="mr-10" src="@/assets/checked.png" @click="checkAnother(false)" v-if="another"/>
+          <img class="mr-10" src="@/assets/unchecked.png" @click="checkAnother(true)" v-if="!another"/>
+          <my-label class="semi-bold colorDarker small mb-5 mt-5" @click.native="checkAnother(true)">Outro</my-label>
+        </div>
       </div>
       <div class="add-item-footer-right">
         <button id="botaoAdicionar" class="primary" @click="adicione">Adicionar</button>
@@ -106,10 +112,16 @@ export default {
 .add-item-footer-left
   display: flex
   max-height: 24px
+  flex-wrap: wrap;
+.add-item-footer-left-item
+  display: flex
 .add-item-footer-right
   display: flex
   max-height: 47px
 #botaoAdicionar
   height: 47px
   width: 120px
+@media screen and (max-width: 740px)
+  .mb-40
+    margin-bottom: 20px
 </style>

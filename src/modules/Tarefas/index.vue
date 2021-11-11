@@ -7,7 +7,7 @@
           <my-label id="minhasFarefas" class="bold colorDarker veryStrong">Minhas Tarefas</my-label>
           <my-label id="minhasFarefas" class="bold colorDarker medium mb-30"
           >Olá <span class="destaqueBlue">{{ auth.user.firstname }}</span>, você tem
-          <span class="destaqueBlue">{{ allUncom }} tarefas</span> pendentes.</my-label>
+          <span class="destaqueBlue">{{ allUncom }} tarefas</span> pendentes, mostrando {{ filtro }} itens.</my-label>
           <div class="submit-line mb-30">
             <input type="text" class="responsive medium mb-15 background" v-model="searchBy"
             required placeholder="Buscar Tarefas">
@@ -48,6 +48,7 @@
         </my-card>
       </div>
       <action-button @click.native="addTodo()"><i class="colorLight fas fa-plus"></i></action-button>
+      <action-filter @click.native="addFilter()"><i class="colorLight fas fa-filter"></i></action-filter>
       <modal name="addTodoForm" width="660px" height="488px" :adaptive="true">
         <add-item></add-item>
       </modal>
@@ -66,6 +67,7 @@ import LayoutBasico from '@/components/layouts/LayoutBasico'
 import MyLabel from '@/components/MyLabel.vue'
 import MyCard from '@/components/MyCard'
 import ActionButton from '@/components/ActionButton'
+import ActionFilter from '@/components/ActionFilter'
 import AddItem from './AddItem'
 import EditItem from './EditItem'
 import ExcluirItem from './ExcluirItem'
@@ -86,7 +88,18 @@ export default {
   },
   computed: {
     ...mapState(['todos', 'auth', 'allUncom']),
-    ...mapFields(['searchBy'])
+    ...mapFields(['searchBy', 'filterBy']),
+    filtro: function () {
+      const filtros = {
+        all: 'todos',
+        completeds: 'apenas concluídos',
+        uncompleteds: 'apenas não concluídos',
+        importants: 'somente importantes',
+        urgents: 'somente urgentes',
+        anothers: 'os de baixa importancia'
+      }
+      return filtros[this.filterBy]
+    }
   },
   components: {
     LayoutBasico,
@@ -97,7 +110,8 @@ export default {
     AddItem,
     EditItem,
     MySpam,
-    ExcluirItem
+    ExcluirItem,
+    ActionFilter
   },
   methods: {
     ...mapActions(['ActionCheck', 'ActionUncheck', 'ActionSearch']),
@@ -135,6 +149,9 @@ export default {
     },
     pesquise () {
       this.ActionSearch()
+    },
+    addFilter () {
+      this.$root.$emit('TarefasSidebar::show')
     }
   }
 }
@@ -228,4 +245,9 @@ export default {
   border-radius: 5px
   min-width: 109px
   padding: 15px 11px
+@media screen and (max-width: 740px)
+  .medium
+    font-size: 14px !important
+  .veryStrong
+    font-size: 19px !important
 </style>

@@ -140,7 +140,7 @@ export default new Vuex.Store({
   getters: {
     getField,
     hasToken ({ token }) {
-      console.log(!!token)
+      // console.log(!!token)
       return !!token
     }
   },
