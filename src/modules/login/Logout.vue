@@ -3,15 +3,14 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex'
 export default {
   name: 'Logout',
-  mouted () {
-    this.$root.$emit('Spinner::show')
-    this.ActionLogout()
-  },
-  methods: {
-    ...mapActions(['ActionLogout'])
+  mounted () {
+    // debugger
+    // setTimeout(function () {
+    this.$root.$emit('Spinner::hide')
+    // this.$router.push({ name: 'Login' })
+    // }, 3000)
   }
 }
 </script>

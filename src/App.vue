@@ -18,11 +18,6 @@ export default {
   },
   mounted () {
     this.$root.$emit('Spinner::hide')
-    // window.uid = null
-    // this.$router.push({ name: window.uid ? 'Dashboard' : 'Login' })
-    // setTimeout(() => {
-    //   this.$root.$emit('Spinner::hide')
-    // }, 3000)
   }
 }
 </script>

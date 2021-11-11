@@ -12,7 +12,7 @@
       <sidebar-button class="sidebar-button"
       name="Configurações" image="gears" route="/configuracoes"/>
       <sidebar-button class="sidebar-button"
-      name="Sair" image="door" route="/configuracoes"/>
+      name="Sair" image="door" route=""/>
     </div>
   </div>
 </template>

@@ -4,22 +4,11 @@ import * as storage from '../modules/login/storage'
 import _ from 'lodash'
 import shortid from 'shortid'
 import { getField, updateField } from 'vuex-map-fields'
-// import createPersistedState from 'vuex-persistedstate'
-// import SecureLS from 'secure-ls'
-// var ls = new SecureLS({ isCompression: false })
+import createPersistedState from 'vuex-persistedstate'
+import SecureLS from 'secure-ls'
+var ls = new SecureLS({ isCompression: false })
 
 Vue.use(Vuex)
-
-const user = {
-  logged: false,
-  firstname: 'Eduardo Pereira',
-  lastname: 'da Costa',
-  username: 'eduardo',
-  role: 'Front-End Developer',
-  email: 'eduardo@appfacilita.com.br',
-  password: '123456',
-  office: 'Front-end Developer'
-}
 
 export default new Vuex.Store({
   state: {
@@ -139,9 +128,9 @@ export default new Vuex.Store({
   },
   getters: {
     getField,
-    hasToken ({ token }) {
+    hasToken ({ auth }) {
       // console.log(!!token)
-      return !!token
+      return !!auth.token
     }
   },
   actions: {
@@ -173,15 +162,10 @@ export default new Vuex.Store({
       context.commit('processTodos')
     },
     ActionCheckToken ({ dispatch, state }) {
-      if (state.token) {
-        return state.token
+      if (state.auth.token) {
+        return state.auth.token
       }
-      const token = storage.getLocalToken()
-      if (!token) {
-        return false
-      }
-      dispatch('ActionSetToken', token)
-      dispatch('ActionLoadSession')
+      return false
     },
     ActionSetToken (context, payload) {
       storage.setLocalToken(payload)
@@ -190,31 +174,19 @@ export default new Vuex.Store({
     ActionSetUser (context, payload) {
       context.commit('setUser', payload)
     },
-    ActionLoadSession ({ dispatch }) {
-      const token = storage.getLocalToken()
-      if (token) {
-        dispatch('ActionSetUser', user)
-        // return token
-      } else {
-        dispatch('ActionLogout')
-        // return false
-      }
-      // })
-    },
     ActionLogout ({ dispatch }) {
       dispatch('ActionSetUser', {})
       dispatch('ActionSetToken', '')
     }
-  }
-  // ,
-  // plugins: [
-  //   createPersistedState({
-  //     key: 'facilitaTasks',
-  //     storage: {
-  //       getItem: (key) => ls.get(key),
-  //       setItem: (key, value) => ls.set(key, value),
-  //       removeItem: (key) => ls.remove(key)
-  //     }
-  //   })
-  // ]
+  },
+  plugins: [
+    createPersistedState({
+      key: 'facilitaTasks',
+      storage: {
+        getItem: (key) => ls.get(key),
+        setItem: (key, value) => ls.set(key, value),
+        removeItem: (key) => ls.remove(key)
+      }
+    })
+  ]
 })

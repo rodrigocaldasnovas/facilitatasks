@@ -26,11 +26,13 @@ export default {
     return {
       user: {
         logged: false,
-        name: 'Eduardo Pereira da Costa',
+        firstname: 'Eduardo Pereira',
+        lastname: 'da Costa',
         username: 'eduardo',
         role: 'Front-End Developer',
         email: 'eduardo@appfacilita.com.br',
-        password: '123456'
+        password: '123456',
+        office: 'Front-end Developer'
       },
       username: '',
       password: ''
@@ -40,6 +42,9 @@ export default {
   name: 'Login',
   computed: {
     ...mapState(['auth'])
+  },
+  mounted () {
+    this.$root.$emit('Spinner::hide')
   },
   methods: {
     ...mapActions(['ActionSetToken', 'ActionSetUser']),
