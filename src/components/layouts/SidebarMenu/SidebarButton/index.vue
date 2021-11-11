@@ -1,10 +1,11 @@
 <template>
-  <div class="sidebar-button" :class="{'sidebar-button-active':this.$router.history.current.name === route}"
-  @click="goRoute(route)">
+  <router-link @click.native="goRoute" class="sidebar-button" :class="{'sidebar-button-active':this.$router.history.current.name === route}"
+  :to="route">
     <i class="mb-5 colorLight" :class="icon" v-if="icon"></i>
-    <img class="mb-5" src="../../../../assets/gears.png" v-if="image"/>
+    <img class="mb-5" src="../../../../assets/gears.png" v-if="image == 'gears'"/>
+    <img class="mb-5" src="../../../../assets/door.png" v-if="image == 'door'"/>
     <my-label class="bold colorLight verySmall">{{name}}</my-label>
-  </div>
+  </router-link>
 </template>
 
 <script>
@@ -21,8 +22,8 @@ export default {
     MyLabel
   },
   methods: {
-    goRoute (route) {
-      this.$router.push({ name: route })
+    goRoute () {
+      this.$root.$emit('SidebarMenu::hide')
     }
   }
 }
@@ -43,6 +44,7 @@ export default {
   i
     font-size 32px
     font-weight: 100
-.sidebar-button-active
-  background-color #1182F2
+@media screen and (min-width: 740px)
+  .sidebar-button-active
+    background-color #1182F2
 </style>

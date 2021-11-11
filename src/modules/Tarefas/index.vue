@@ -7,9 +7,9 @@
           <my-label id="minhasFarefas" class="bold colorDarker veryStrong">Minhas Tarefas</my-label>
           <my-label id="minhasFarefas" class="bold colorDarker medium mb-30"
           >Olá <span class="destaqueBlue">{{ auth.user.firstname }}</span>, você tem
-          <span class="destaqueBlue">4 tarefas</span> pendentes.</my-label>
+          <span class="destaqueBlue">{{ allUncom }} tarefas</span> pendentes.</my-label>
           <div class="submit-line mb-30">
-            <input type="text" class="medium mb-15 background" v-model="searchBy"
+            <input type="text" class="responsive medium mb-15 background" v-model="searchBy"
             required placeholder="Buscar Tarefas">
             <button id="buttonSearch" class="submit-lente" @click="pesquise" type="button">
               <i class="fa fa-search"></i>
@@ -43,27 +43,6 @@
                   </div>
                 </div>
               </div>
-              <!-- <ul class="icons-list item-options">
-                <li class="dropdown" :class="{open:item.id === openId}" @click="openThis(item.id)" >
-                  <a href="#" class="dropdown-toggle" data-toggle="dropdown"
-                  aria-expanded="true">
-                    <img src="@/assets/tree.png" />
-                  </a>
-                  <div class="dropdown-menu dropdown-menu-right" v-show="menuDropDown" v-click-outside="nameOfCustomEventToCall">
-                    <img class="dropdown-menu-img" src="@/assets/treeblue.png" />
-                    <div class="options-drop">
-                      <div class="dropdown-item" @click="editar(item)">
-                        <img src="@/assets/greenbol.png"/>
-                        <my-label class="item-tit bold colorDarkLow small">Editar</my-label>
-                      </div>
-                      <div class="dropdown-item" @click="excluir(item)">
-                        <img src="@/assets/bluebol.png"/>
-                        <my-label class="item-tit bold colorDarkLow small">Excluir</my-label>
-                      </div>
-                    </div>
-                  </div>
-                </li>
-              </ul> -->
             </div>
           </div>
         </my-card>
@@ -106,7 +85,7 @@ export default {
     }
   },
   computed: {
-    ...mapState(['todos', 'auth']),
+    ...mapState(['todos', 'auth', 'allUncom']),
     ...mapFields(['searchBy'])
   },
   components: {
@@ -124,7 +103,6 @@ export default {
     ...mapActions(['ActionCheck', 'ActionUncheck', 'ActionSearch']),
     closeSearch () {
       this.openId = ''
-      console.log('outside')
     },
     outside () {
       if (this.opening) {
@@ -180,7 +158,7 @@ export default {
   position:absolute
   top: 0px
   right: 13px
-  z-index:10
+  z-index: var(--top-3)
   border:none
   background:transparent
   outline:none
@@ -225,58 +203,6 @@ export default {
   opacity : 0.5
 .riscado
   text-decoration: line-through
-// .icons-list
-//   margin: 0
-//   padding: 0
-//   list-style: none
-//   line-height: 1
-//   font-size: 0
-// .icons-list>li:first-child
-//   margin-left: 0;
-// .icons-list>li
-//   position: relative
-//   display: inline-block
-//   margin-left: 5px
-//   font-size: 13px
-// .icons-list>li>a
-//   color: inherit
-//   display: block
-//   opacity: 1
-// .open>a
-//   outline: 0;
-// .open>.dropdown-menu
-//   display: block
-// .dropdown-menu
-//   min-width: 180px
-//   padding: 7px 0
-//   color: #333
-//   -webkit-box-shadow: 0 1px 3px rgb(0 0 0 / 10%)
-//   box-shadow: 0 1px 3px rgb(0 0 0 / 10%)
-// .dropdown-menu-right
-//   left: auto
-//   right: 0
-// .dropdown-menu
-//   position: absolute
-//   height: 74px
-//   top: -15px
-//   left: -95px
-//   z-index: 1000
-//   display: none
-//   float: left
-//   min-width: 109px
-//   padding: 15px 11px
-//   margin: 2px 0 0
-//   list-style: none
-//   font-size: 13px
-//   text-align: left
-//   background-color: #fff
-//   border: 1px solid #ddd
-//   border-radius: 3px
-//   // -webkit-box-shadow: 0 6px 12px rgb(0 0 0 / 18%)
-//   // box-shadow: 0 6px 12px rgb(0 0 0 / 18%)
-//   box-shadow: 0px 0px 8px 2px rgba(49, 81, 113, 0.1)
-//   border-radius: 5px
-//   background-clip: padding-box
 .options-drop
   display: flex
   flex-direction: column
@@ -291,8 +217,6 @@ export default {
   position: absolute
   right: 10px
   top: 15px
-// .item-tit
-//   cursor pointer
 .box-menu
   background: #fff
   width: 110px

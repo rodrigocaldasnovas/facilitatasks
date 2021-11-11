@@ -4,9 +4,9 @@ import * as storage from '../modules/login/storage'
 import _ from 'lodash'
 import shortid from 'shortid'
 import { getField, updateField } from 'vuex-map-fields'
-import createPersistedState from 'vuex-persistedstate'
-import SecureLS from 'secure-ls'
-var ls = new SecureLS({ isCompression: false })
+// import createPersistedState from 'vuex-persistedstate'
+// import SecureLS from 'secure-ls'
+// var ls = new SecureLS({ isCompression: false })
 
 Vue.use(Vuex)
 
@@ -41,7 +41,8 @@ export default new Vuex.Store({
     searchBy: '',
     filterBy: 'all',
     importants: 0,
-    urgents: 0
+    urgents: 0,
+    allUncom: 0
   },
   mutations: {
     updateField,
@@ -70,13 +71,15 @@ export default new Vuex.Store({
       })
     },
     processTodos (state) {
-      let data = ''
+      let data = state.todos_full
+      const allUncompls = data.filter(item => {
+        return !item.completed
+      })
+      state.allUncom = allUncompls.length
       if (state.searchBy !== '') {
-        data = state.todos_full.filter(item => {
+        data = data.filter(item => {
           return ((item.title.indexOf(state.searchBy) !== -1) || (item.descript.indexOf(state.searchBy) !== -1))
         })
-      } else {
-        data = state.todos_full
       }
       let completeds = data.filter(item => {
         return item.completed
@@ -202,15 +205,16 @@ export default new Vuex.Store({
       dispatch('ActionSetUser', {})
       dispatch('ActionSetToken', '')
     }
-  },
-  plugins: [
-    createPersistedState({
-      key: 'facilitaTasks',
-      storage: {
-        getItem: (key) => ls.get(key),
-        setItem: (key, value) => ls.set(key, value),
-        removeItem: (key) => ls.remove(key)
-      }
-    })
-  ]
+  }
+  // ,
+  // plugins: [
+  //   createPersistedState({
+  //     key: 'facilitaTasks',
+  //     storage: {
+  //       getItem: (key) => ls.get(key),
+  //       setItem: (key, value) => ls.set(key, value),
+  //       removeItem: (key) => ls.remove(key)
+  //     }
+  //   })
+  // ]
 })

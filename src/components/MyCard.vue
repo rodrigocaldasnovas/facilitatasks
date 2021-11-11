@@ -11,6 +11,10 @@ export default {
 </script>
 
 <style lang="stylus">
-.my-card
-  width: 645px
+@media screen and (min-width: 980px)
+  .my-card
+    width: 645px
+@media screen and (max-width: 980px)
+  .my-card
+    width: 95%
 </style>

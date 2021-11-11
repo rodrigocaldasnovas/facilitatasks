@@ -21,10 +21,18 @@ export default {
 </script>
 
 <style lang="stylus">
-.user-logged
-  display: flex
-.user-logged-identify
-  display: flex
-  flex-direction: column
-  justify-content: center
+@media screen and (min-width: 740px)
+  .user-logged
+    display: flex
+  .user-logged-identify
+    display: flex
+    flex-direction: column
+    justify-content: center
+@media screen and (max-width: 740px)
+  .user-logged
+    display: flex
+    img
+      height: 35px
+  .user-logged-identify
+    display: none
 </style>
